@@ -1,0 +1,13 @@
+language: python
+python:
+  - "3.6"
+
+# Command to install dependencies
+install:
+  - pip install -r requirements.txt
+
+deploy:
+  provider: heroku
+  api_key:
+    secure: "c8ba2dd9-dd9c-4713-9c95-b2d0f166abc0"
+  app: crash-heat

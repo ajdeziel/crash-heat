@@ -1,0 +1,48 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+
+        <style>
+            html, body {
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            #map {
+                height: 100%;
+                width: 100%;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="map"></div>
+
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+
+        <!-- Google Maps API Key, Visualization Library & Google Maps Map Initialization -->
+        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBKXYs8_mSmcTg5tKsCYPMO9RUuwU8WMaI&libraries=visualization&callback=initMap" async defer></script>
+
+        <!-- scripts.js -->
+        <script type="text/javascript" src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+
+        <!-- json_to_latlng.js -->
+        <script type="text/javascript" src="{{ url_for('static', filename='js/json_to_latlng.js') }}"></script>
+
+        <script>
+            getLatLngs({{ api_url|tojson }}).then((returnData) => {
+                // Do something with the LatLng array once it's loaded.
+
+                // Initialize the heatmap.
+                const heatmap = new google.maps.visualization.HeatmapLayer({
+                  data: returnData,
+                  map: map
+                });
+            });
+        </script>
+
+    </body>
+</html>
