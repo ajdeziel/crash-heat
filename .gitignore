@@ -1,0 +1,17 @@
+# IDEA files
+.idea
+
+# Python Cache files
+__pycache__
+
+# Virtual environment files
+venv
+
+# DS_Store files
+**/.DS_Store
+
+# node_modules folder
+app_test/node_modules
+
+# .pyc files
+**/*.pyc
