@@ -15,3 +15,6 @@ app_test/node_modules
 
 # .pyc files
 **/*.pyc
+
+# Travis CI
+.travis.yml
