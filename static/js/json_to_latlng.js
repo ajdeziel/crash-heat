@@ -9,8 +9,8 @@ const getLatLngs = function getLatLngs(apiUrl) {
 
     $.each(features, (index, jsonObject) => {
       const { attributes } = jsonObject;
-      const lat = attributes.LATITUDE;
-      const lng = attributes.LONGITUDE;
+      const lat = parseFloat(attributes.LATITUDE.toFixed(4));
+      const lng = parseFloat(attributes.LONGITUDE.toFixed(4));
 
       const latLng = new google.maps.LatLng({ lat, lng });
 

@@ -3,25 +3,29 @@
 
     <head>
         <meta charset="UTF-8">
-
         <style>
-            html, body {
-                height: 100%;
-                margin: 0;
-                padding: 0;
-            }
-            #map {
-                height: 100%;
-                width: 100%;
+            @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
+
+            @font-face {
+                font-family: 'Glyphicons Halflings';
+                src: url('{{ url_for('static', filename='bootstrap/css/glyphicons-halflings-regular.ttf') }}');
             }
         </style>
     </head>
 
     <body>
-        <div id="map"></div>
-
         <!-- jQuery -->
         <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+
+        <!-- jQuery UI -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='js/jquery-ui.min.css') }}">
+        <script src="{{ url_for('static', filename='js/jquery-ui.min.js') }}"></script>
+
+        <!-- Bootstrap Material Design -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap-material-design.min.css') }}">
+        <script type="text/javascript" src="{{ url_for('static', filename='bootstrap/js/popper.min.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='bootstrap/js/bootstrap-material-design.min.js') }}"></script>
+        <script>$(document).ready(function() { $('body').bootstrapMaterialDesign(); });</script>
 
         <!-- Google Maps API Key, Visualization Library & Google Maps Map Initialization -->
         <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBKXYs8_mSmcTg5tKsCYPMO9RUuwU8WMaI&libraries=visualization&callback=initMap" async defer></script>
@@ -29,18 +33,161 @@
         <!-- scripts.js -->
         <script type="text/javascript" src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 
-        <!-- json_to_latlng.js -->
-        <script type="text/javascript" src="{{ url_for('static', filename='js/json_to_latlng.js') }}"></script>
+        <!-- json_to_jsObj.js -->
+        <script type="text/javascript" src="{{ url_for('static', filename='js/json_to_jsObj.js') }}"></script>
+
+        <!-- crashheat.js -->
+        <script type="text/javascript" src="{{ url_for('static', filename='js/crashheat.js') }}"></script>
+
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/crashheat.css') }}"></link>
+
+        <div id="main-window">
+            <div class="slider">
+                <div id="year-slider-handle" class="ui-slider-handle"></div>
+            </div>
+
+            <div class="wrapper">
+                <nav id="sidebar">
+                    <div class="sidebar-header">
+                        <h3>Filters</h3>
+                    </div>
+                    <ul class="list-unstyled components">
+<!--                         <li>
+                            <div class="dropdown">
+                              <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Light Condition
+                              </button>
+                              <div id="light-condition" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="#">All</a>
+                              </div>
+                            </div>
+                        </li>
+ -->
+                        <li>
+                            <a href="#accident-type" data-toggle="collapse" aria-expanded="false">Accident Type</a>
+                            <ul class="collapse list-unstyled active-panel" id="accident-type">
+                                <li><a href="#" active-selection="true">All</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="#day-of-week" data-toggle="collapse" aria-expanded="false">Day of Week</a>
+                            <ul class="collapse list-unstyled active-panel" id="day-of-week">
+                                <li><a href="#" active-selection="true">All</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="#light-condition" data-toggle="collapse" aria-expanded="false">Light Condition</a>
+                            <ul class="collapse list-unstyled active-panel" id="light-condition">
+                                <li><a href="#" active-selection="true">All</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="#road-geometry" data-toggle="collapse" aria-expanded="false">Road Geometry</a>
+                            <ul class="collapse list-unstyled active-panel" id="road-geometry">
+                                <li><a href="#" active-selection="true">All</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="#speed-zone" data-toggle="collapse" aria-expanded="false">Speed Zone</a>
+                            <ul class="collapse list-unstyled active-panel" id="speed-zone">
+                                <li><a href="#" active-selection="true">All</a></li>
+                            </ul>
+                        </li>
+                   </ul>
+                </nav>
+            </div>
+
+            <div id="map"></div>
+        </div>
+
 
         <script>
-            getLatLngs({{ api_url|tojson }}).then((returnData) => {
-                // Do something with the LatLng array once it's loaded.
+            // Get the JSON data and convert it to an arra of JS objects with crash data.
+            getCrashes({{ api_url|tojson }}).then((crashes) => {
+                const yearData = getYearData(crashes);
+                const lightConditions = getFilterData(crashes, 'LIGHT_CONDITION');
+                const accidentTypes = getFilterData(crashes, 'ACCIDENT_TYPE');
+                const roadGeometry = getFilterData(crashes, 'ROAD_GEOMETRY');
+                const speedZones = getFilterData(crashes, 'SPEED_ZONE');
+                const daysOfWeek = getFilterData(crashes, 'DAY_OF_WEEK');
 
-                // Initialize the heatmap.
-                const heatmap = new google.maps.visualization.HeatmapLayer({
-                  data: returnData,
-                  map: map
+                const handle = $('#year-slider-handle');
+                let heatmap = initHeatmap(map);
+                let filteredCrashes = [];
+                let currentYear = 0;
+                let filters = {};
+
+                // Event listener to update the displayed data.
+                $(document).on('updateCrashData', (event) => {
+                    filteredCrashes = applyFilters(crashes, filters);
+                    heatmap = updateHeatmap(heatmap, filteredCrashes);
                 });
+
+                // Year slider.
+                $('.slider').slider({
+                    min: yearData.minYear,
+                    max: yearData.maxYear,
+                    animate: true,
+                    value: yearData.maxYear,
+                    create() {
+                        handle.text(yearData.maxYear);
+                        currentYear = yearData.maxYear;
+                        filters.YEAR = currentYear;
+                        $(document).trigger('updateCrashData');
+                    },
+                    slide(event, ui) {
+                        handle.text(ui.value);
+                        currentYear = ui.value;
+                        filters.YEAR = currentYear;
+                        $(document).trigger('updateCrashData');
+                    },
+                });
+
+                const createDropdownFilter = function createDropdownFilter(filter, filterName, domElement) {
+                    $.each(filter, (index, value) => {
+                        $(domElement).append('<li><a href="#" active-selection="false">' + value + '</a></li>');
+                    });
+
+                    const button = $(domElement).siblings('a');
+
+                    const dropdownItemString = domElement + ' li';
+                    $(dropdownItemString).on('click', (event) => {
+                        if(event.target.getAttribute('active-selection') === 'false') {
+                            $(domElement + ' a[active-selection="true"]').attr('active-selection', 'false');
+                            event.target.setAttribute('active-selection', 'true');
+                        }
+                        // else {
+                        //     event.target.setAttribute('active-selection', 'false');
+                        // }
+
+                        const filterText = event.target.text;
+
+                        if(filterText === 'All') {
+                            delete filters[filterName];
+                        }
+                        else {
+                            filters[filterName] = filterText;
+                        }
+
+                        // button.text(filterText);
+                        $(document).trigger('updateCrashData');
+                    });
+                };
+
+                $('#map').ready( () => {
+                    createDropdownFilter(lightConditions, 'LIGHT_CONDITION', '#light-condition');
+                    createDropdownFilter(accidentTypes, 'ACCIDENT_TYPE', '#accident-type');
+                    createDropdownFilter(roadGeometry, 'ROAD_GEOMETRY', '#road-geometry');
+                    createDropdownFilter(speedZones, 'SPEED_ZONE', '#speed-zone');
+                    createDropdownFilter(daysOfWeek, 'DAY_OF_WEEK', '#day-of-week');
+                });
+
+                console.log(filteredCrashes[0].LIGHT_CONDITION);
             });
         </script>
 

@@ -11,7 +11,7 @@ function initMap() {
     map = new google.maps.Map(mapDivElement, {
         mapTypeControl: false,
         zoom: initZoom,
-        center: new google.maps.LatLng(-37.137593, 144.934220), //Center on page load
+        center: new google.maps.LatLng(-37.137593, 144.934220), // Center on page load
     });
 
     // Limit map to Victoria (state of Australia).

@@ -1,0 +1,107 @@
+html, body {
+	font-family: 'Poppins', sans-serif;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+#main-window {
+	height: 100%;
+	width: 100%;
+}
+
+nav {
+	color: #fff;
+}
+
+a {
+	color: #fff;
+}
+
+#map {
+	height: 100%;
+	width: 100%;
+}
+
+.slider {
+	position: absolute;
+	top: 95%;
+	width: 60%;
+	left: 20%;
+	z-index: 5;
+}
+#year-slider-handle {
+	width: 3em;
+	height: 1.6em;
+	top: 50%;
+	margin-top: -.8em;
+	text-align: center;
+	line-height: 1.6em;
+}
+
+.wrapper {
+	/*display: flex;*/
+	position: absolute; 
+	height: 100%;
+	z-index: 4;
+}
+#sidebar {
+	background: #7386D5;
+	transition: all 0.3s;
+	height: 100%;
+	min-width: 15em; 
+	max-width: 15em;
+	overflow-y: scroll;
+}
+#sidebar .sidebar-header {
+	padding: 20px;
+	background: #6d7fcc;
+}
+#sidebar ul.components {
+	padding: 20px 0;
+	border-bottom: 1px solid #47748b;
+}
+#sidebar ul p {
+	padding: 10px;
+}
+#sidebar ul li a {
+	padding: 10px;
+	font-size: 1.1em;
+	display: block;
+}
+#sidebar ul li a:hover {
+	color: #7386D5;
+	background: #fff;
+}
+
+a[data-toggle="collapse"] {
+	position: relative;
+}
+
+a[aria-expanded="false"]::before, a[aria-expanded="true"]::before {
+	content: '\e259';
+	display: block;
+	position: absolute;
+	right: 20px;
+	font-family: 'Glyphicons Halflings';
+	font-size: 0.6em;
+}
+
+a[aria-expanded="true"]::before {
+	content: '\e260';
+}
+
+#sidebar a[aria-expanded="true"]{
+    color: #fff;
+    background: #6d7fcc;
+}
+
+.active-panel a {
+    color: #fff;
+    background: #6d7fcc;
+    font-size: 0.9em !important;
+    padding-left: 30px !important;
+}
+
+a[active-selection="true"] {
+	background: #4b4b96;
+}
