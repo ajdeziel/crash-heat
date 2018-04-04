@@ -84,3 +84,30 @@ const updateHeatmap = function updateHeatmap(heatmap, crashes) {
         ],
   });
 };
+
+const daysOfWeek = {
+  'monday': 1,
+  'tuesday': 2,
+  'wednesday': 3,
+  'thursday': 4,
+  'friday': 5,
+  'saturday': 6,
+  'sunday': 7
+};
+
+const sortByDayOfWeek = function sortByDayOfWeek(data) {
+  data.sort( (day1, day2) => {
+    day1 = day1.toLowerCase();
+    day2 = day2.toLowerCase();
+    return daysOfWeek[day1] > daysOfWeek[day2];
+  });
+};
+
+const sortBySpeedLimit = function sortBySpeedLimit(data) {
+  data.sort( (speed1, speed2) => {
+    speed1 = parseInt(speed1);
+    speed2 = parseInt(speed2);
+    return speed1 > speed2;
+  });
+};
+

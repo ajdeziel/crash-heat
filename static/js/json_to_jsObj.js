@@ -2,6 +2,7 @@
 // Returns a promise with data.
 const getCrashes = function getCrashes(apiUrl) {
   const crashes = [];
+  $(document).trigger('loading');
 
   // Convert JSON to array of JavaScript objects.
   const jsonTojsObj = function jsonTojsObj(jsonData) {

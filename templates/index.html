@@ -14,6 +14,9 @@
     </head>
 
     <body>
+        <!-- Lato Font -->
+        <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+
         <!-- jQuery -->
         <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 
@@ -43,6 +46,8 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/crashheat.css') }}"></link>
 
         <div id="main-window">
+
+            <div class="dark-screen"></div>
             <div class="slider">
                 <div id="year-slider-handle" class="ui-slider-handle"></div>
             </div>
@@ -50,7 +55,7 @@
             <div class="wrapper">
                 <nav id="sidebar">
                     <div class="sidebar-header">
-                        <h3>Filters</h3>
+                        <h3 id="crashheat-logo"><span class="logo-crash">Crash</span><span class="logo-heat">Heat</span></h3>
                     </div>
                     <ul class="list-unstyled components">
 <!--                         <li>
@@ -107,14 +112,29 @@
 
 
         <script>
+            $(document).on('loading', () => {
+                // $('#main-window').append('<div class="dark-screen"></div>');
+                $('#main-window').append('<div class="loader"></div>');
+            });
+
+            $(document).on('loaded', () => {
+                $('.loader').remove();
+                $('.dark-screen').remove();
+            }); 
+
             // Get the JSON data and convert it to an arra of JS objects with crash data.
             getCrashes({{ api_url|tojson }}).then((crashes) => {
+                $(document).trigger('loaded');
+
                 const yearData = getYearData(crashes);
                 const lightConditions = getFilterData(crashes, 'LIGHT_CONDITION');
                 const accidentTypes = getFilterData(crashes, 'ACCIDENT_TYPE');
                 const roadGeometry = getFilterData(crashes, 'ROAD_GEOMETRY');
                 const speedZones = getFilterData(crashes, 'SPEED_ZONE');
                 const daysOfWeek = getFilterData(crashes, 'DAY_OF_WEEK');
+
+                sortByDayOfWeek(daysOfWeek);
+                sortBySpeedLimit(speedZones);
 
                 const handle = $('#year-slider-handle');
                 let heatmap = initHeatmap(map);
