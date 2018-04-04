@@ -38,6 +38,22 @@ const initHeatmap = function initHeatmap(map) {
     map,
     radius: 20,
     maxIntensity: 30,
+    gradient: [
+        'rgba(255, 0, 0, 0)',
+        'rgba(255, 0, 0, 1)',
+        'rgba(255, 0, 0, 1)',
+        'rgba(255, 0, 0, 1)',
+        'rgba(255, 0, 0, 1)',
+        'rgba(255, 0, 0, 1)',
+        'rgba(255, 0, 0, 1)',
+        'rgba(255, 0, 0, 1)',
+        'rgba(219, 8, 8, 1)',
+        'rgba(219, 8, 8, 1)',
+        'rgba(219, 8, 8, 1)',
+        'rgba(186, 9, 9, 1)',
+        'rgba(186, 9, 9, 1)',
+        'rgba(186, 9, 9, 1)'
+        ],
   });
 };
 
@@ -50,5 +66,21 @@ const updateHeatmap = function updateHeatmap(heatmap, crashes) {
     radius: 20,
     maxIntensity: 30,
     data: latLngs,
+    gradient: [
+        'rgba(255, 0, 0, 0)',
+        'rgba(255, 0, 0, 1)',
+        'rgba(255, 0, 0, 1)',
+        'rgba(255, 0, 0, 1)',
+        'rgba(255, 0, 0, 1)',
+        'rgba(255, 0, 0, 1)',
+        'rgba(255, 0, 0, 1)',
+        'rgba(255, 0, 0, 1)',
+        'rgba(219, 8, 8, 1)',
+        'rgba(219, 8, 8, 1)',
+        'rgba(219, 8, 8, 1)',
+        'rgba(186, 9, 9, 1)',
+        'rgba(186, 9, 9, 1)',
+        'rgba(186, 9, 9, 1)'
+        ],
   });
 };
