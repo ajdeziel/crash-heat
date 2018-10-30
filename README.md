@@ -7,6 +7,6 @@
 
 ## Authors
 * AJ Po-Deziel: Project Manager, Data Engineer
-* Bowei Huang
-* Eric Bains
+* Bowei Huang: Data Analyst
+* Eric Bains: Data Analyst
 * Yaroslav Leontenko: Full Stack Engineer
