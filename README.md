@@ -2,7 +2,7 @@
 
 ### Data sourced from [VicRoads](https://vicroadsopendata-vicroadsmaps.opendata.arcgis.com/datasets/crashes-last-five-years), published on [Data.Vic](https://www.data.vic.gov.au/). Use provided under license by the Victoria State Government under Creative Commons 4.0 International (CC BY 4.0).
 
-### **Visit our application, [hosted on Heroku](http://crash-heat.herokuapp.com/)!**
+### Update (March 15, 2019): **This application has now been shut down on Heroku, and is no longer available for viewing.**
 
 
 ## Authors
